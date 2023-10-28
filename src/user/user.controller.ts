@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { JWTGuard } from 'src/auth/guard/jtw.guard';
 
@@ -11,6 +11,13 @@ export class UserController {
     @Get(":id")
     async getUser(@Param("id") id:string){
         return this.userService.findUserById(id);
+    }
+
+
+    @Get("get/getAllUser")
+    async getAllUser(){
+        console.log("fired user")
+        return this.userService.getAllUser();
     }
  
 }

@@ -9,12 +9,10 @@ export class JWTGuard implements CanActivate{
     async canActivate(context: ExecutionContext):Promise<boolean>  {
         
         const request = context.switchToHttp().getRequest();
-        console.log(request);
         const authHeader = request.headers.authorization;
         if(!authHeader) throw new UnauthorizedException();
 
         const [type,token] = authHeader.split(' ');
-        console.log(type,token);
         if(type !== 'Bearer') throw new UnauthorizedException();
 
         try {

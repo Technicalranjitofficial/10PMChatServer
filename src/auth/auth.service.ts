@@ -5,7 +5,7 @@ import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { response } from 'express';
 
-const expiresIn = 20 * 1000;
+const expiresIn =60* 60 * 1000 * 24;
 
 @Injectable()
 export class AuthService {
@@ -26,7 +26,9 @@ export class AuthService {
             user,
             backendToken:{
                 accessToken:await this.JwtService.signAsync(payload,{
-                   expiresIn:"40s",
+                    //expiresIn 5 MINUTES,
+                    expiresIn:"1d",
+                
                    secret:process.env.ACCESS_TOKEN_SECRET
                 }),
 
@@ -62,7 +64,7 @@ export class AuthService {
 
         return {
             accessToken:await this.JwtService.signAsync(payload,{
-                expiresIn:"40s",
+                expiresIn:"1d",
                 secret:process.env.ACCESS_TOKEN_SECRET
             }),
             refreshToken:await this.JwtService.signAsync(payload,{

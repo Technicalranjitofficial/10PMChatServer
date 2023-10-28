@@ -46,6 +46,11 @@ export class UserService {
         const {password,...result} = user;
         return result;
     }
+    
+
+    async getAllUser(){
+        return await this.prisma.user.findMany({});
+    }
 
 
 }
