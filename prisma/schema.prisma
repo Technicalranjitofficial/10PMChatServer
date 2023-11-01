@@ -17,5 +17,10 @@ model User{
   name String
   email String @unique
   password String
+  isOnline Boolean @default(false)
+  isAvailable Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
 
 }

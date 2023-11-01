@@ -74,4 +74,14 @@ export class AuthService {
             expiresIn:new Date().setTime(new Date().getTime()+expiresIn)
         }
     }
+
+
+    async validateUserByJwt(payload:any){
+     
+       return await this.JwtService.verifyAsync(payload,{
+            secret:process.env.ACCESS_TOKEN_SECRET
+        });
+       
+
+    }
 }

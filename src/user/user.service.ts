@@ -4,6 +4,7 @@ import { PrismaService } from 'src/prisma.service';
 
 import {hash} from "bcrypt"
 import { NotFoundError } from 'rxjs';
+import { SocketUserDTO } from './dto/SocketUser.dto';
 
 @Injectable()
 export class UserService {
@@ -51,6 +52,19 @@ export class UserService {
     async getAllUser(){
         return await this.prisma.user.findMany({});
     }
+
+    //update user is online status
+    // async updateUserStatus(socketId:string,user:Map<string,SocketUserDTO>,roomId:string){
+
+    //     const getUser = user.get(socketId);
+    //     if(!getUser) return;
+    //     getUser.isAvailable = false;
+    //     getUser.roomId=roomId
+    //     user.set(socketId,getUser);
+      
+    // }
+
+   
 
 
 }
