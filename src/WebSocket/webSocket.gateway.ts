@@ -56,6 +56,16 @@ export class WebSocketGateWay
     this.socketService.handleOnDisconnect(this.server, client);
   }
 
+  @SubscribeMessage('onClose')
+  async handleOnClose(client: any, data: any) {
+    this.socketService.handleOnCloseConnection(this.server, client);
+  }
+
+  @SubscribeMessage("onStop")
+  async handleOnStop(client: any, data: any) {
+    this.socketService.handleOnStop(this.server, client);
+  }
+
   @SubscribeMessage('findUserToJoin')
   async handleOnFindUserToJoin(client: any, data: any) {
     this.socketService.handleOnFindUser(client, this.server);

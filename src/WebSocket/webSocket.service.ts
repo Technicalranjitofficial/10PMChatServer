@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { WsException } from '@nestjs/websockets';
 import { Socket } from 'dgram';
 import { Server } from 'socket.io';
 import { SocketUserDTO } from 'src/user/dto/SocketUser.dto';
@@ -17,16 +18,20 @@ export class WebSocketService {
   ) {
     if (this.user.get(client.id)) {
       if (this.waitingList.includes(client.id)) {
-        return;
+        const idx = this.waitingList.findIndex(user=>user===client.id);
+        if(idx!=-1){
+          this.waitingList.splice(idx,1);
+        }
+        return server.to(client.id).emit('joinSuccess', this.user.get(client.id));
       } else {
-        this.waitingList.push(client.id);
         server.to(client.id).emit('joinSuccess', this.user.get(client.id));
       }
 
       return;
-    } else {
+    }
+    
+    else {
       this.user.set(client.id, newUser);
-      this.waitingList.push(client.id);
       server.to(client.id).emit('joinSuccess', this.user.get(client.id));
       return;
     }
@@ -34,12 +39,10 @@ export class WebSocketService {
 
   async handleOnDisconnect(server: Server, client: any) {
     if (!this.user.get(client.id)) return;
-
     if (this.waitingList.includes(client.id)) {
       const findIdx = this.waitingList.findIndex((user) => user === client.id);
       if (findIdx != -1) {
         this.user.delete(client.id);
-
         this.waitingList.splice(findIdx, 1);
         return;
       }
@@ -52,26 +55,69 @@ export class WebSocketService {
         this.pairedUsers.delete(client.id);
         this.user.delete(client.id);
         this.pairedUsers.delete(otherUser);
-        this.waitingList.push(otherUser);
-        server.to(otherUser).emit('userLeft');
+        server.to(otherUser).emit('userLeft');       
         return;
       }
+      this.user.delete(client.id);
+      this.pairedUsers.delete(client.id);
+
+      return;
+
     }
-    this.pairedUsers.delete(client.id);
     this.user.delete(client.id);
+    
   }
+
+
+  
+
+    async handleOnCloseConnection(server: Server, client: any) {
+      if (!this.user.get(client.id)) return;
+      if (this.waitingList.includes(client.id)) {
+        const findIdx = this.waitingList.findIndex((user) => user === client.id);
+        if (findIdx != -1) {
+          this.user.delete(client.id);
+          this.waitingList.splice(findIdx, 1);
+          return;
+        }
+        return;
+      }
+  
+      if (this.pairedUsers.get(client.id)) {
+        const otherUser = this.pairedUsers.get(client.id);
+        if (otherUser) {
+          this.pairedUsers.delete(client.id);
+          this.pairedUsers.delete(otherUser);
+          server.to(otherUser).emit('userLeft');
+          console.log("here");
+          server.to(client.id).emit('closed');
+         
+          return;
+        }
+        this.pairedUsers.delete(client.id);
+  
+        return;
+  
+      }
+      server.to(client.id).emit('closed');  
+    }
+  
 
   randomIdx() {
     const randomIndex = Math.floor(Math.random() * this.waitingList.length);
     return randomIndex;
   }
 
-  async handleOnFindUser(client: any, server: Server) {
-    if (this.waitingList.length == 1) {
-      server.to(client.id).emit('noUser');
-      return;
-    }
+  
 
+  async handleOnFindUser(client: any, server: Server) {
+    if (!this.user.get(client.id)) return server.to(client.id).emit("error",{message:"User not found"});
+    if (!this.waitingList.includes(client.id)){
+      this.waitingList.push(client.id);
+    } 
+    
+    if (this.waitingList.length >1) {
+    
     let randomIdx = this.randomIdx();
     let randomUser = this.waitingList[randomIdx];
     if (randomUser) {
@@ -94,7 +140,25 @@ export class WebSocketService {
         return;
       }
     }
+
+  }else{
+    server.to(client.id).emit("noUser");
   }
+  }
+
+
+
+  async handleOnStop(server:Server,client:any){
+    if(!this.user.get(client.id)) return server.to(client.id).emit("error",{message:"User not found"});
+    if(!this.waitingList.includes(client.id)) return server.to(client.id).emit("error",{message:"User not in waiting list"});
+    const findIdx = this.waitingList.findIndex(user=>user===client.id);
+    if(findIdx!=-1){
+      this.waitingList.splice(findIdx,1);
+      return server.to(client.id).emit("stopSuccess");
+    }
+  }
+
+  
 
   async handleOnSendMessage(server: Server, client: any, data: any) {
     const user = this.user.get(client.id);
