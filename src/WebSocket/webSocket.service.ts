@@ -69,7 +69,7 @@ export class WebSocketService {
   }
 
 
-  
+
 
     async handleOnCloseConnection(server: Server, client: any) {
       if (!this.user.get(client.id)) return;
@@ -158,6 +158,8 @@ export class WebSocketService {
     }
   }
 
+
+
   
 
   async handleOnSendMessage(server: Server, client: any, data: any) {
@@ -168,5 +170,15 @@ export class WebSocketService {
     server
       .to(otherUser)
       .emit('OnMessage', { message: data.message, name: user.name });
+  }
+
+
+  async handleOnTyping(server:Server,client:any,data:any){
+    console.log("typing",data);
+    // const user = this.user.get(client.id);
+    // if(!user) return;
+    const otherUser = this.pairedUsers.get(client.id);
+    if(!otherUser) return;
+    server.to(otherUser).emit("onTyping",data);
   }
 }

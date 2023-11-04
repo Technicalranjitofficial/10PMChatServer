@@ -1,4 +1,4 @@
-import { UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Logger, UnauthorizedException, UseGuards } from '@nestjs/common';
 import {
   MessageBody,
   OnGatewayConnection,
@@ -58,6 +58,7 @@ export class WebSocketGateWay
 
   @SubscribeMessage('onClose')
   async handleOnClose(client: any, data: any) {
+    // console.log("Hello");
     this.socketService.handleOnCloseConnection(this.server, client);
   }
 
@@ -66,13 +67,24 @@ export class WebSocketGateWay
     this.socketService.handleOnStop(this.server, client);
   }
 
+
+
   @SubscribeMessage('findUserToJoin')
   async handleOnFindUserToJoin(client: any, data: any) {
     this.socketService.handleOnFindUser(client, this.server);
   }
 
+  
+
   @SubscribeMessage('sendMessage')
   async handleOnSendMessage(client: any, data: any) {
+    Logger.log(data);
     await this.socketService.handleOnSendMessage(this.server, client, data);
   }
+
+  @SubscribeMessage('userIstyping')
+  async handleOnUserIsTyping(client: any, data: any) {
+    await this.socketService.handleOnTyping(this.server, client,data);
+  }
+
 }
