@@ -9,11 +9,12 @@ import { AuthController } from './auth/auth.controller';
 import { UserService } from './user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { WebSocketModule } from './WebSocket/webSocket.module';
+import { MailService } from './mail.service';
 
 
 @Module({
   imports: [UserModule, AuthModule,ConfigModule.forRoot(),WebSocketModule],
   controllers: [UserController,AuthController],
-  providers: [AuthService,PrismaService,UserService,JwtService,],
+  providers: [AuthService,PrismaService,UserService,JwtService,MailService],
 })
 export class AppModule {}

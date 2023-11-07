@@ -8,3 +8,17 @@ export class LoginDTO{
     @IsString()
     password:string;
 }
+
+export class SendResetPasswordDTO{
+    @IsString()
+    @IsEmail()
+    email:string;
+}
+
+export class SetNewPasswordDTO{
+    @IsString()
+    token:string;
+
+    @IsString()
+    password:string;
+}
