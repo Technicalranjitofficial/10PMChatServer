@@ -108,7 +108,7 @@ export class AuthService {
 
         if(!token) throw new InternalServerErrorException("Something went wrong");
 
-        await this.mailService.sendPassReset(dto.email,`${process.env.HOTS_URL}/reset/${token}`,user.name);
+        await this.mailService.sendPassReset(dto.email,`${process.env.HOST_URL}/reset/${token}`,user.name);
 
         return {
             message:"Password Reset Link Sent to your email",
