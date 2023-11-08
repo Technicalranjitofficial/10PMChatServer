@@ -21,7 +21,7 @@ export class MailService {
   async sendOtpVerificationEmail(to: string, otpCode: string,username:string,verifyLink:string) {
     const templatePath = path.join(__dirname,'../src/template/otp-verification.ejs'); // Update the path to your EJS template
 
-    ejs.renderFile(templatePath, { otpCode,username,verifyLink }, (error:any, html:any) => {
+    ejs.renderFile(templatePath, { otpCode,username,verifyLink },async(error:any, html:any) => {
       if (error) {
         console.error('Error rendering EJS template:', error);
         return;
@@ -34,7 +34,7 @@ export class MailService {
         html, // Use the rendered HTML content
       };
 
-      this.transporter.sendMail(mailOptions, (err:any, info:any) => {
+      await this.transporter.sendMail(mailOptions, (err:any, info:any) => {
         if (err) {
           console.error('Error sending email:', err);
         } else {
