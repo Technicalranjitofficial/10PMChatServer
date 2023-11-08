@@ -28,7 +28,7 @@ export class MailService {
       }
 
       const mailOptions = {
-        from: 'MeetStranger<mail.server.hib@gmail.com>',
+        from: 'Matcher<mail.server.hib@gmail.com>',
         to,
         subject: 'OTP Verification',
         html, // Use the rendered HTML content
@@ -54,7 +54,7 @@ export class MailService {
           }
     
           const mailOptions = {
-            from: 'MeetStranger<mail.server.hib@gmail.com>',
+            from: 'Matcher<mail.server.hib@gmail.com>',
             to,
             subject: 'Password Reset',
             html, // Use the rendered HTML content
@@ -80,7 +80,7 @@ export class MailService {
       }
 
       const mailOptions = {
-        from: 'MeetStranger<mail.server.hib@gmail.com>',
+        from: 'Matcher<mail.server.hib@gmail.com>',
         to,
         subject: 'Account Created!',
         html, // Use the rendered HTML content
@@ -107,7 +107,7 @@ async passwordChanged(to: string,username:string) {
     }
 
     const mailOptions = {
-      from: 'MeetStranger<mail.server.hib@gmail.com>',
+      from: 'Matcher<mail.server.hib@gmail.com>',
       to,
       subject: 'Password Changed!',
       html, // Use the rendered HTML content
