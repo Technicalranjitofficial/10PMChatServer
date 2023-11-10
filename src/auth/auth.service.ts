@@ -4,7 +4,7 @@ import { LoginDTO, SendResetPasswordDTO, SetNewPasswordDTO } from './dto/auth.dt
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { response } from 'express';
-import { MailService } from 'src/mail.service';
+import { MyMailService } from 'src/mail.service';
 import { VerifyTokenDTO, emailVerifyDTO } from 'src/user/dto/user.dto';
 import { validateToken } from 'src/utils/User.util';
 
@@ -13,7 +13,7 @@ const expiresIn =60* 60 * 1000 * 24;
 @Injectable()
 export class AuthService {
 
-    constructor(private readonly userService:UserService,private JwtService:JwtService,private readonly mailService:MailService){}
+    constructor(private readonly userService:UserService,private JwtService:JwtService,private readonly mailService:MyMailService){}
 
     async login(dto:LoginDTO){
 

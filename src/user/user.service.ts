@@ -4,12 +4,12 @@ import { PrismaService } from 'src/prisma.service';
 import {hash} from "bcrypt"
 import { generateEmailVerificationToken, validateEmailOtp } from 'src/utils/User.util';
 import { JwtService } from '@nestjs/jwt';
-import { MailService } from 'src/mail.service';
+import { MyMailService } from 'src/mail.service';
 
 @Injectable()
 export class UserService {
 
-    constructor(private readonly prisma:PrismaService,private readonly jwtService:JwtService,private readonly emailService:MailService){};
+    constructor(private readonly prisma:PrismaService,private readonly jwtService:JwtService,private readonly emailService:MyMailService){};
 
     async createUser(dto:createUserDto){
         const user = await this.prisma.user.findUnique({
@@ -21,6 +21,7 @@ export class UserService {
         if(user) throw new ConflictException('Email already exists');
 
         const {token,otp} = await generateEmailVerificationToken(dto,this.jwtService);
+        // await this.emailService.sendEmail();
       await this.emailService.sendOtpVerificationEmail(dto.email,otp.toString(),dto.name,`${process.env.HOST_URL}/verify?otpMode=false&&token=${token}&&otp=${otp}}`);
 
 
