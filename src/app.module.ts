@@ -27,7 +27,7 @@ import * as path from 'path';
       
     },
     defaults:{
-      from:process.env.MAIL_USERNAME
+      from:`Matcher<${process.env.MAIL_USERNAME}>`
     },
 
     template:{
