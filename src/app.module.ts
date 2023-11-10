@@ -14,32 +14,43 @@ import { MailerModule } from '@nestjs-modules/mailer';
 
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import * as path from 'path';
-
+import * as mailgunTransport from 'nodemailer-mailgun-transport';
 
 @Module({
-  imports: [UserModule, AuthModule,ConfigModule.forRoot(),WebSocketModule,MailerModule.forRoot({
-    transport: {
-      service: 'gmail',
-      auth: {
-        user: process.env.MAIL_USERNAME,
-        pass: process.env.MAIL_PASSWORD,
+  imports: [
+    UserModule,
+    AuthModule,
+    ConfigModule.forRoot(),
+    WebSocketModule,
+    MailerModule.forRoot({
+      transport: {
+        service:"gmail",
+        auth: {
+          user: process.env.MAIL_USERNAME,
+          pass: process.env.MAIL_PASSWORD,
+        
+        },
       },
-      
-    },
-    defaults:{
-      from:`Matcher<${process.env.MAIL_USERNAME}>`
-    },
+      defaults: {
+        from: 'Matcher<21053420@kiit.ac.in>',
+      },
+      template: {
+        dir: path.join(__dirname , '../src/template'), // Replace with the actual path to your templates
+        adapter: new EjsAdapter(), // Use the appropriate adapter for your templating engine
+        options: {
+          strict: false,
+        },
+      },
+    })
 
-    template:{
-      adapter:new EjsAdapter(),
-      dir:path.join(__dirname,"../src/template/"),
-      options:{
-      strict:false
-      }
-
-    }
-  }),],
-  controllers: [UserController,AuthController],
-  providers: [AuthService,PrismaService,UserService,JwtService,MyMailService],
+  ],
+  controllers: [UserController, AuthController],
+  providers: [
+    AuthService,
+    PrismaService,
+    UserService,
+    JwtService,
+    MyMailService,
+  ],
 })
 export class AppModule {}
