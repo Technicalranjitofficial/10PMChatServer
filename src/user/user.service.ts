@@ -23,12 +23,10 @@ export class UserService {
         const {token,otp} = await generateEmailVerificationToken(dto,this.jwtService);
         // await this.emailService.sendEmail();
       await this.emailService.sendOtpVerificationEmail(dto.email,otp.toString(),dto.name,`${process.env.HOST_URL}/verify?otpMode=false&&token=${token}&&otp=${otp}}`);
-
-
-
         return {
             token:token,
             otp:otp,
+            email:dto.email,
             message:"Email verification token sent to your email",
             statusCode:201,
         };
@@ -179,8 +177,6 @@ export class UserService {
     //     user.set(socketId,getUser);
       
     // }
-
-   
 
 
 }

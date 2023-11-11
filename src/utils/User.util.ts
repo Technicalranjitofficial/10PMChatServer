@@ -13,7 +13,7 @@ export const generateEmailVerificationToken = async (
       otp: otp,
     },
 
-    { expiresIn: '5min', secret: process.env.EMAIL_VERIFICATION_TOKEN_SECRET },
+    { expiresIn: '30min', secret: process.env.EMAIL_VERIFICATION_TOKEN_SECRET },
   );
   return {token,otp};
 };
