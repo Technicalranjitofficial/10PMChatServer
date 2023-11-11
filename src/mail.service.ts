@@ -28,7 +28,7 @@ export class MyMailService {
       template: 'otp-verification', // Name of your template file without extension
       context: data,
     }).then((d)=>{
-      console.log("Eail Has been Sent",d);
+      console.log("Email Has been Sent",d);
     }).catch((err)=>{
       console.log(err);
     });
