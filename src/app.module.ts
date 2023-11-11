@@ -24,15 +24,17 @@ import * as mailgunTransport from 'nodemailer-mailgun-transport';
     WebSocketModule,
     MailerModule.forRoot({
       transport: {
-        service:"gmail",
+        // service:"Mailgun",
+        host: 'smtp.mailgun.org',
+
         auth: {
-          user: process.env.MAIL_USERNAME,
-          pass: process.env.MAIL_PASSWORD,
+          user: `${process.env.MAIL_USERNAME}`,
+          pass: `${process.env.MAIL_PASSWORD}`,
         
         },
       },
       defaults: {
-        from: 'Matcher<21053420@kiit.ac.in>',
+        from: 'Matcher<noreply@kiitconnect.live>',
       },
       template: {
         dir: path.join(__dirname , '../src/template'), // Replace with the actual path to your templates

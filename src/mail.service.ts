@@ -51,8 +51,8 @@ async sendPassReset(to: string, resetLink:string,username:string) {
      username:username,
      resetLink:resetLink
     },
-  }).then(()=>{
-    console.log("Eail Has been Sent");
+  }).then((d)=>{
+    console.log("Eail Has been Sent",d);
   }).catch((err)=>{
     console.log(err);
   });
