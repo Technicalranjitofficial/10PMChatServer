@@ -11,6 +11,7 @@ export class JWTGuard implements CanActivate{
         const request = context.switchToHttp().getRequest();
         const authHeader = request.headers.authorization;
         if(!authHeader) throw new UnauthorizedException();
+        
 
         const [type,token] = authHeader.split(' ');
         if(type !== 'Bearer') throw new UnauthorizedException();
@@ -19,6 +20,7 @@ export class JWTGuard implements CanActivate{
             const user = await this.JWTService.verifyAsync(token,{
                 secret:process.env.ACCESS_TOKEN_SECRET
             })
+            console.log("user",user);
             request['user']= user;
         } catch (error) {
             throw new UnauthorizedException();

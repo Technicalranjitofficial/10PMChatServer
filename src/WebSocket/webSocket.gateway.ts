@@ -36,12 +36,14 @@ export class WebSocketGateWay
   async handleConnection(client: any, ...args: any[]) {
     console.log('connection', client.id);
     const accessToken = client.handshake.query.accessToken;
+    console.log(accessToken,client.handshake.query);
     try {
       const userData = await this.authService.validateUserByJwt(accessToken);
-      const { user } = userData;
+     
+      console.log(userData);
       const newUser: SocketUserDTO = {
-        id: user.id,
-        name: user.name,
+        id: userData.email,
+        name: userData.name,
       };
 
       await this.socketService.handleOnUserJoined(this.server, client, newUser);
