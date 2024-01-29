@@ -11,6 +11,16 @@ export class WebSocketService {
   private waitingList: string[] = [];
   private pairedUsers: Map<string, string> = new Map();
 
+
+
+   socketServer: Server;
+  socketUser: Map<string, string> = new Map();
+
+  initialize(server: Server) {
+    console.log(server);
+    this.socketServer = server;
+  }
+
   async handleOnUserJoined(
     server: Server,
     client: any,
@@ -181,4 +191,35 @@ export class WebSocketService {
     if(!otherUser) return;
     server.to(otherUser).emit("onTyping",data);
   }
+
+
+
+
+
+
+
+
+
+
+  // for other application [kIIT-COnnect]
+
+
+  handleOnConnectUser(server:Server,client: any, data: any) {
+    this.socketServer=server;
+    //create a room for the user 
+    console.log(data, client.id,server);
+    this.socketServer.socketsJoin(client.id);
+  }
+
+  handleOnDisconnectUser(server:Server,client: any) {
+    //remove the user from the map
+    console.log('disconnection', client.id);
+    this.socketServer.socketsLeave(client.id);
+  }
+
+  async handleOnSendNotification(data: any) { 
+    console.log(data,this.socketServer);
+    
+  }
+   //send notification t
 }

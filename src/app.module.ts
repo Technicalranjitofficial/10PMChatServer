@@ -13,8 +13,12 @@ import { MyMailService } from './mail.service';
 import { MailerModule } from '@nestjs-modules/mailer';
 
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
+import { NotificationsController } from './notifications/notifications.controller';
+import { NotificationsService } from './notifications/notifications.service';
+import { NotificationsModule } from './notifications/notifications.module';
 import * as path from 'path';
 import * as mailgunTransport from 'nodemailer-mailgun-transport';
+import { NotificationGateway } from './notificatio-gateway/Notification.gateway';
 
 @Module({
   imports: [
@@ -43,16 +47,21 @@ import * as mailgunTransport from 'nodemailer-mailgun-transport';
           strict: false,
         },
       },
-    })
+    }),
+    NotificationsModule
 
   ],
-  controllers: [UserController, AuthController],
+  controllers: [UserController, AuthController, NotificationsController],
   providers: [
     AuthService,
     PrismaService,
     UserService,
     JwtService,
     MyMailService,
+    NotificationsService,
+    NotificationGateway,
+
+    
   ],
 })
 export class AppModule {}
