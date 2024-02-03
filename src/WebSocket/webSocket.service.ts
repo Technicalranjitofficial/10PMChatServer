@@ -13,7 +13,7 @@ export class WebSocketService {
 
 
 
-   socketServer: Server;
+  socketServer: Server;
   socketUser: Map<string, string> = new Map();
 
   initialize(server: Server) {

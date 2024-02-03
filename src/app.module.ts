@@ -13,12 +13,14 @@ import { MyMailService } from './mail.service';
 import { MailerModule } from '@nestjs-modules/mailer';
 
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
-import { NotificationsController } from './notifications/notifications.controller';
-import { NotificationsService } from './notifications/notifications.service';
-import { NotificationsModule } from './notifications/notifications.module';
+// import { NotificationsController } from './notifications/notifications.controller';
+// import { NotificationsService } from './notifications/notifications.service';
+// import { NotificationsModule } from './notifications/notifications.module';
 import * as path from 'path';
 import * as mailgunTransport from 'nodemailer-mailgun-transport';
-import { NotificationGateway } from './notificatio-gateway/Notification.gateway';
+// import { NotificationGateway } from './notificatio-gateway/Notification.gateway';
+import { WebSocketService } from './WebSocket/webSocket.service';
+import { WebSocketGateWay } from './WebSocket/webSocket.gateway';
 
 @Module({
   imports: [
@@ -48,18 +50,17 @@ import { NotificationGateway } from './notificatio-gateway/Notification.gateway'
         },
       },
     }),
-    NotificationsModule
 
   ],
-  controllers: [UserController, AuthController, NotificationsController],
+  controllers: [UserController, AuthController],
   providers: [
     AuthService,
     PrismaService,
     UserService,
     JwtService,
     MyMailService,
-    NotificationsService,
-    NotificationGateway,
+    WebSocketService,
+    WebSocketGateWay
 
     
   ],
